@@ -218,10 +218,10 @@
     
     
     NSDictionary* pushUrlDictionary = [NSDictionary dictionaryWithDictionary:notificationMessage];
-    if ([[pushUrlDictionary allKeys] containsObject:@"pushUrl"]) {
+    if ([[pushUrlDictionary allKeys] containsObject:@"callback"]) {
         NSLog(@"'key' exists.");
-        NSLog(@"---> %@", [pushUrlDictionary valueForKey:@"pushUrl"]);
-        pushUrlString = [NSString stringWithFormat:@"%@", [pushUrlDictionary valueForKey:@"pushUrl"]];
+        NSLog(@"---> %@", [pushUrlDictionary valueForKey:@"callback"]);
+        pushUrlString = [NSString stringWithFormat:@"%@", [pushUrlDictionary valueForKey:@"callback"]];
     }
     //    id badgeArg = [options objectForKey:@"badge"];
     
