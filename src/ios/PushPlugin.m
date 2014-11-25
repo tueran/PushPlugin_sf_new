@@ -252,37 +252,38 @@
         self.notificationMessage = nil;
     }
     
-    // NSURL Request
-    NSString *pushUrl = pushUrlString;
-    //NSLog(@".......------> %@ <--------.....", pushUrl);
-    NSURL* sfUrl = [NSURL URLWithString:pushUrl];
-    //NSLog(@"URL: %@", sfUrl);
-    // set the request
-    NSURLRequest* sfRequest = [NSURLRequest requestWithURL:sfUrl];
-    NSOperationQueue* sfQueue = [[NSOperationQueue alloc] init];
-    
-    typedef void (^CompletionBlock)(NSURLResponse *, NSData *, NSError *);
-    __block CompletionBlock completionHandler = nil;
-    
-    // Block to start the request
-    dispatch_block_t enqueueBlock = ^{
-        [NSURLConnection sendAsynchronousRequest:sfRequest queue:sfQueue completionHandler:completionHandler];
-    };
-    
-    completionHandler = ^(NSURLResponse *sfResponse, NSData *sfData, NSError *sfError) {
-        if (sfError) {
-            enqueueBlock();
-            NSLog(@"Error: %@", sfError);
-            
-        } else {
-            NSString* myResponse;
-            myResponse = [[NSString alloc] initWithData:sfData encoding:NSUTF8StringEncoding];
-            //NSLog(@"Response: %@", myResponse);
-        }
-    };
-    
-    enqueueBlock();
-    
+    if ([[pushUrlDictionary allKeys] containsObject:@"callback"]) {
+        // NSURL Request
+        NSString *pushUrl = pushUrlString;
+        //NSLog(@".......------> %@ <--------.....", pushUrl);
+        NSURL* sfUrl = [NSURL URLWithString:pushUrl];
+        //NSLog(@"URL: %@", sfUrl);
+        // set the request
+        NSURLRequest* sfRequest = [NSURLRequest requestWithURL:sfUrl];
+        NSOperationQueue* sfQueue = [[NSOperationQueue alloc] init];
+        
+        typedef void (^CompletionBlock)(NSURLResponse *, NSData *, NSError *);
+        __block CompletionBlock completionHandler = nil;
+        
+        // Block to start the request
+        dispatch_block_t enqueueBlock = ^{
+            [NSURLConnection sendAsynchronousRequest:sfRequest queue:sfQueue completionHandler:completionHandler];
+        };
+        
+        completionHandler = ^(NSURLResponse *sfResponse, NSData *sfData, NSError *sfError) {
+            if (sfError) {
+                enqueueBlock();
+                NSLog(@"Error: %@", sfError);
+                
+            } else {
+                NSString* myResponse;
+                myResponse = [[NSString alloc] initWithData:sfData encoding:NSUTF8StringEncoding];
+                //NSLog(@"Response: %@", myResponse);
+            }
+        };
+        
+        enqueueBlock();
+    }
     
 }
 
